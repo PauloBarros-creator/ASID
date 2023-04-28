@@ -11,8 +11,8 @@ def on_publish(client, userdata, mid, properties=None):
     print("mid: " + str(mid))
 
 # print which topic was subscribed to
-def on_subscribe(client, userdata, mid, granted_qos, properties=None):
-    print("Subscribed: " + str(mid) + " " + str(granted_qos))
+# def on_subscribe(client, userdata, mid, granted_qos, properties=None):
+#     print("Subscribed: " + str(mid) + " " + str(granted_qos))
 
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
@@ -32,15 +32,15 @@ client.username_pw_set("Paulo", "elcreador123r3PA")
 client.connect("16b1102d3f7b4cd08777a3a8319e43c7.s2.eu.hivemq.cloud", 8883)
 
 # setting callbacks, use separate functions like above for better visibility
-client.on_subscribe = on_subscribe
+# client.on_subscribe = on_subscribe
 client.on_message = on_message
 client.on_publish = on_publish
 
 # subscribe to all topics of encyclopedia by using the wildcard "#"
-client.subscribe("encyclopedia/#", qos=1)
+# client.subscribe("encyclopedia/#", qos=1)
 
 # a single publish, this can also be done in loops, etc.
-client.publish("encyclopedia/temperature", payload="ola", qos=1)
+client.publish("encyclopedia/temperature", payload="123", qos=1)
 
 # loop_forever for simplicity, here you need to stop the loop manually
 # you can also use loop_start and loop_stop
