@@ -15,11 +15,11 @@ mqtt_username = "Paulo"
 mqtt_password = "elcreador123r3PA"
 
 # Define MongoDB connection settings
-uri = "mongodb+srv://teste:teste@asid.ntinirt.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb+srv://teste:teste@g5-main-cluster.mamiiq8.mongodb.net/?retryWrites=true&w=majority"
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
-mongo_database_name = "asid-main"
+mongo_database_name = "bus-db"
 mongo_collection_name = "sensors"
 mongo_collection = client[mongo_database_name][mongo_collection_name]
 
