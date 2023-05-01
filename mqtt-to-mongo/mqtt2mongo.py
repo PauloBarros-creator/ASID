@@ -4,15 +4,12 @@ import urllib.parse
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-# Define MQTT broker settings
-broker_address = "16b1102d3f7b4cd08777a3a8319e43c7.s2.eu.hivemq.cloud"
+# Define MQTT broker settings - credenciais nao verificadas
+broker_address = "e2b7763dd0b642e5b0e81494c6de515b.s2.eu.hivemq.cloud"
 broker_port = 8883
-mqtt_topic = "encyclopedia/temperature"
-#mqtt_username = "teste"
-#mqtt_password = "Teste123"
-
-mqtt_username = "Paulo"
-mqtt_password = "elcreador123r3PA"
+mqtt_topic = "sensors"
+mqtt_username = "ASID2023"
+mqtt_password = "pila123PI"
 
 # Define MongoDB connection settings
 uri = "mongodb+srv://teste:teste@g5-main-cluster.mamiiq8.mongodb.net/?retryWrites=true&w=majority"
