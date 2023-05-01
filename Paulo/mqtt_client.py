@@ -1,7 +1,9 @@
 import time
 import paho.mqtt.client as paho
 from paho import mqtt
+import csv
 
+i=0
 # setting callbacks for different events to see if it works, print the message etc.
 def on_connect(client, userdata, flags, rc, properties=None):
     print("CONNACK received with code %s." % rc)
@@ -26,6 +28,7 @@ client.on_connect = on_connect
 
 # enable TLS for secure connection
 client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
+client.tls_insecure_set(True) # Ignora a verificação do certificado
 # set username and password
 client.username_pw_set("Paulo", "elcreador123r3PA")
 # connect to HiveMQ Cloud on port 8883 (default for MQTT)
@@ -38,9 +41,18 @@ client.on_publish = on_publish
 
 # subscribe to all topics of encyclopedia by using the wildcard "#"
 # client.subscribe("encyclopedia/#", qos=1)
-
-# a single publish, this can also be done in loops, etc.
-client.publish("encyclopedia/temperature", payload="123", qos=1)
+# Abre o arquivo CSV para leitura
+with open('coordenadas.csv', 'r') as file:
+    # Cria um objeto leitor CSV
+    reader = csv.reader(file)
+    # Loop através das linhas do arquivo
+    for row in reader:
+        # Converte a linha em uma string separada por vírgulas
+        message = ','.join(row)
+        # a single publish, this can also be done in loops, etc.
+        client.publish("encyclopedia/temperature", payload=message, qos=1)
+        # Espera 1 segundos antes de enviar a próxima mensagem
+        time.sleep(0.01)
 
 # loop_forever for simplicity, here you need to stop the loop manually
 # you can also use loop_start and loop_stop
