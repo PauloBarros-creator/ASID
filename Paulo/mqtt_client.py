@@ -2,6 +2,7 @@ import time
 import paho.mqtt.client as paho
 from paho import mqtt
 import csv
+import json
 
 i=0
 # setting callbacks for different events to see if it works, print the message etc.
@@ -30,9 +31,9 @@ client.on_connect = on_connect
 client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
 client.tls_insecure_set(True) # Ignora a verificação do certificado
 # set username and password
-client.username_pw_set("Paulo", "elcreador123r3PA")
+client.username_pw_set("ASID2023", "pila123PI")
 # connect to HiveMQ Cloud on port 8883 (default for MQTT)
-client.connect("16b1102d3f7b4cd08777a3a8319e43c7.s2.eu.hivemq.cloud", 8883)
+client.connect("e2b7763dd0b642e5b0e81494c6de515b.s2.eu.hivemq.cloud", 8883)
 
 # setting callbacks, use separate functions like above for better visibility
 # client.on_subscribe = on_subscribe
@@ -42,13 +43,23 @@ client.on_publish = on_publish
 # subscribe to all topics of encyclopedia by using the wildcard "#"
 # client.subscribe("encyclopedia/#", qos=1)
 # Abre o arquivo CSV para leitura
-with open('coordenadas.csv', 'r') as file:
+with open('/home/paulo/Desktop/Uminho/2º Semestre/ASID/Paulo/coordenadas.csv', 'r') as file:
     # Cria um objeto leitor CSV
     reader = csv.reader(file)
     # Loop através das linhas do arquivo
     for row in reader:
         # Converte a linha em uma string separada por vírgulas
-        message = ','.join(row)
+        dados = {
+            "Rota" : 3,
+            "Origem": "Universidade do Minho - Campus de Azurem, Campus de Azurem, Av. da Universidade, 4800-058 Guimaraes",
+            "Destino": 'Famalicao, 4760-010 Vila Nova de Famalicao',
+            "Velocidade": 45,
+            "Temperatura": 22,
+            "N Passageiros": 9,
+            "Latitude": row[0],
+            "Longitude": row[1]
+        }
+        message  = json.dumps(dados)
         # a single publish, this can also be done in loops, etc.
         client.publish("encyclopedia/temperature", payload=message, qos=1)
         # Espera 1 segundos antes de enviar a próxima mensagem
