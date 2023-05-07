@@ -6,6 +6,8 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-COPY mqtt2mongo.py . 
+EXPOSE 5010
 
-CMD [ "python3", "mqtt2mongo.py"]
+COPY server.py . 
+
+CMD [ "python3", "server.py"]

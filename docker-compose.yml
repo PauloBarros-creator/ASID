@@ -11,32 +11,18 @@ services:
       context: app
       dockerfile: Dockerfile
     hostname: app1
-    volumes:
-      - ./app/static:/static
 
   app2:
     build:
-      context: app
+      context: app-dois
       dockerfile: Dockerfile
     hostname: app2
-    volumes:
-      - ./app/static:/static
 
   app3:
     build:
-      context: app
+      context: app-tres
       dockerfile: Dockerfile
     hostname: app3
-    volumes:
-      - ./app/static:/static
-
-  app4:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    hostname: app4
-    volumes:
-      - ./app/static:/static
   
   nginx:
     image: nginx:latest
@@ -46,10 +32,13 @@ services:
       - app1
       - app2
       - app3
-      - app4
 
     ports:
       - "80:80"
+      - "5000:5000" # --
+      - "5001:5001" # remover depois de testes
+      - "5010:5010" # --
+      
 
 volumes:
   files:
