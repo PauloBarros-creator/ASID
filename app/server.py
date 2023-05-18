@@ -1,9 +1,3 @@
-# mudar e dar pass mongodb
-
-# meter na bd lista de rotas com paragens
-#    pedido get com todas as rotas
-#    pedido get com paragens de uma rota
-
 import os, shutil, re
 import json
 import flask
@@ -23,6 +17,35 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 
 app = flask.Flask(__name__)
 
+@app.route('/tickets', methods=['GET','POST'])
+def get_tickets():
+    if request.method == 'GET':
+        tickets = []
+        mongo_collection = client["users-db"]["tickets"]
+        for ticket in mongo_collection.find():
+            tickets.append({
+                'quantidade': ticket['quantidade'],
+                'rota': ticket['rota'],
+                'preco': ticket['preco']
+            })
+        return jsonify(tickets)
+    else:
+        # Extract information from the request
+        quant = request.form.get('quantidade')
+        rota = request.form.get('rota')
+        preco = request.form.get('preco')
+
+        # Create a new document
+        ticket = {
+            'quantidade': quant,
+            'rota': rota,
+            'preco': preco
+        }
+
+        # set database and collection to post to - then post
+        mongo_collection = client["users-db"]["tickets"]
+        mongo_collection.insert_one(ticket)
+        return ("200 OK")
 
 @app.route('/sensors', methods=['GET'])
 def get_sensor_info():
@@ -80,7 +103,7 @@ def add_user():
         return ("200 OK")
     else:
         users = []
-        mongo_collection = client["user-db"]["users"]
+        mongo_collection = client["users-db"]["users"]
         for user in mongo_collection.find():
             users.append({
                 'name': user['name'],
