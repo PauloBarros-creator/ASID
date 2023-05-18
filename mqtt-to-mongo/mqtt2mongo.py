@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import ssl
+import json
 import urllib.parse
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -25,9 +26,11 @@ mongo_collection = client[mongo_database_name][mongo_collection_name]
 def on_message(client, userdata, message):
     print(message.payload)
     print("Received message: ", message.payload.decode())
-    # Insert incoming message into MongoDB collection
-    message_dict = {"value": message.payload.decode()}
-    mongo_collection.insert_one(message_dict)
+    message_dict = json.loads(message.payload.decode())
+
+    #mongo_collection.insert_one(message_dict)
+    mongo_collection.update_one({}, {"$set": message_dict}, upsert=True)
+    
 
 # Set up MQTT client and connect to broker with authentication and SSL/TLS
 mqtt_client = mqtt.Client()
