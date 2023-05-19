@@ -28,6 +28,7 @@ def get_tickets():
                 'rota': ticket['rota'],
                 'preco': ticket['preco']
             })
+        data = {"data": tickets}
         return jsonify(tickets)
     else:
         # Extract information from the request
@@ -94,7 +95,7 @@ def get_routes2():
 
 @app.route('/routes3', methods=['GET'])
 def get_routes3():
-    routes = {}
+    routes = []
     mongo_collection = client["bus-db"]["routes"]
     for route in mongo_collection.find():
         routes.append({
