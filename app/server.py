@@ -80,6 +80,30 @@ def get_routes():
         })
     return jsonify(routes)
 
+@app.route('/routes2', methods=['GET'])
+def get_routes2():
+    routes = {}
+    mongo_collection = client["bus-db"]["routes"]
+    for route in mongo_collection.find():
+        route_id = str(route['_id'])  # Convert ObjectId to string for JSON serialization
+        routes[route_id] = {
+            'start': route['start'],
+            'end': route['end']
+        }
+    return jsonify(routes)
+
+@app.route('/routes3', methods=['GET'])
+def get_routes3():
+    routes = {}
+    mongo_collection = client["bus-db"]["routes"]
+    for route in mongo_collection.find():
+        routes.append({
+            'start': route['start'],
+            'end': route['end']
+        })
+    data = {"data": routes}
+    return jsonify(data)
+
 @app.route('/user', methods=['GET','POST'])
 def add_user():
     if request.method == 'POST':
