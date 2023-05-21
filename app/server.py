@@ -29,7 +29,9 @@ def get_tickets():
                 'preco': ticket['preco']
             })
         data = {"data": tickets}
-        return jsonify(tickets)
+        response = jsonify(data)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
         # Extract information from the request
         quant = request.form.get('quantidade')
@@ -46,7 +48,9 @@ def get_tickets():
         # set database and collection to post to - then post
         mongo_collection = client["users-db"]["tickets"]
         mongo_collection.insert_one(ticket)
-        return ("200 OK")
+        response = "200 OK"
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 @app.route('/sensors', methods=['GET'])
 def get_sensor_info():
@@ -55,7 +59,9 @@ def get_sensor_info():
     newest_document = mongo_collection.find_one(sort=[("_id", DESCENDING)])
 
     if newest_document is None:
-        return jsonify({})  # Return an empty response if no documents are found
+        response = jsonify({})  # Return an empty response if no documents are found
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     sensor_info = {
         'Rota': newest_document['Rota'],
@@ -68,32 +74,11 @@ def get_sensor_info():
         "Longitude": newest_document['Longitude']
     }
     
-    return jsonify(sensor_info)
+    response = jsonify(sensor_info)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/routes', methods=['GET'])
-def get_routes():
-    routes = []
-    mongo_collection = client["bus-db"]["routes"]
-    for route in mongo_collection.find():
-        routes.append({
-            'start': route['start'],
-            'end': route['end']
-        })
-    return jsonify(routes)
-
-@app.route('/routes2', methods=['GET'])
-def get_routes2():
-    routes = {}
-    mongo_collection = client["bus-db"]["routes"]
-    for route in mongo_collection.find():
-        route_id = str(route['_id'])  # Convert ObjectId to string for JSON serialization
-        routes[route_id] = {
-            'start': route['start'],
-            'end': route['end']
-        }
-    return jsonify(routes)
-
-@app.route('/routes3', methods=['GET'])
 def get_routes3():
     routes = []
     mongo_collection = client["bus-db"]["routes"]
@@ -103,7 +88,9 @@ def get_routes3():
             'end': route['end']
         })
     data = {"data": routes}
-    return jsonify(data)
+    response = jsonify(data)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/user', methods=['GET','POST'])
 def add_user():
@@ -125,7 +112,9 @@ def add_user():
         # set database and collection to post to - then post
         mongo_collection = client["users-db"]["users"]
         mongo_collection.insert_one(user)
-        return ("200 OK")
+        response = "200 OK"
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
         users = []
         mongo_collection = client["users-db"]["users"]
@@ -136,7 +125,10 @@ def add_user():
                 'phone': phone,
                 'age': user['age']
             })
-        return jsonify(users)
+        response = jsonify(users)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+        
 
 if __name__ == '__main__':
     app.run(port=5000)
